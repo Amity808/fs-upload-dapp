@@ -47,9 +47,8 @@ export const DatasetsViewer = () => {
                       <p className="text-sm text-gray-500 mt-1">
                         Status:{" "}
                         <span
-                          className={`font-medium ${
-                            dataset.isLive ? "text-green-600" : "text-red-600"
-                          }`}
+                          className={`font-medium ${dataset.isLive ? "text-green-600" : "text-red-600"
+                            }`}
                         >
                           {dataset.isLive ? "Live" : "Inactive"}
                         </span>
@@ -67,7 +66,7 @@ export const DatasetsViewer = () => {
                           onClick={() => {
                             navigator.clipboard.writeText(
                               dataset.provider?.products.PDP?.data.serviceURL ||
-                                ""
+                              ""
                             );
                             window.alert("PDP URL copied to clipboard");
                           }}

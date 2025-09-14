@@ -61,6 +61,7 @@ export const RecordWastePage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     const [uploadedData, setUploadedData] = useState<any>(null);
+    const [contractResult, setContractResult] = useState<any>(null);
     const [showTroubleshooting, setShowTroubleshooting] = useState(false);
 
     // Load hospitals with dummy data
@@ -131,16 +132,16 @@ export const RecordWastePage = () => {
             setUploadedData(uploadResult);
 
             // Step 2: Record waste data to smart contract (gas-optimized - only essential data)
-            // In a real implementation, you would call:
-            // await recordWasteData({
-            //   ipfsHash: uploadResult.ipfsHash,  // All detailed data stored in IPFS
-            //   weight: formData.weight,
-            //   wasteAmount: formData.wasteAmount,
-            //   hospitalAddress: selectedHospital?.walletAddress || ''
-            // });
+            const selectedHospital = hospitals.find(h => h.walletAddress === formData.hospitalAddress);
+            const contractResult = await recordWasteData({
+                ipfsHash: uploadResult.ipfsHash,  // All detailed data stored in IPFS
+                weight: formData.weight,
+                wasteAmount: formData.wasteAmount,
+                hospitalAddress: selectedHospital?.walletAddress || ''
+            });
 
-            // Simulate smart contract interaction
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            console.log('Smart contract transaction:', contractResult);
+            setContractResult(contractResult);
 
             setSuccess(true);
             setFormData({
@@ -224,6 +225,7 @@ export const RecordWastePage = () => {
                                     <p><strong>IPFS Hash:</strong> <code className="bg-green-100 px-1 rounded">{uploadedData.ipfsHash}</code></p>
                                     <p><strong>Evidence Files:</strong> {uploadedData.evidenceFiles.length} files uploaded</p>
                                     <p><strong>Data Size:</strong> {uploadedData.wasteDataFile.size} bytes</p>
+                                    <p><strong>Transaction Hash:</strong> <code className="bg-green-100 px-1 rounded">{contractResult?.hash || 'Pending...'}</code></p>
                                 </div>
 
                                 <div className="text-xs text-green-600">

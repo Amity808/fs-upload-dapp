@@ -1,20 +1,29 @@
-import { useAccount } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { useState } from 'react';
-import { WasteInsuredABI } from '@/utils/WasteInsuredABI';
+import { WasteInsuredABI } from '../utils/WasteInsuredABI';
 
-// Contract address - you'll need to update this with your deployed contract address
-const WASTE_CONTRACT_ADDRESS = '0x...'; // Replace with your contract address
+// Contract address - deployed on Filecoin Calibration testnet
+const WASTE_CONTRACT_ADDRESS = '0xaE31760921F58e37C79aCbBB0f4D06fe3E47907b';
 
 export const useWasteContract = () => {
     const { address, isConnected } = useAccount();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { writeContractAsync } = useWriteContract();
 
-    // Mock data for demonstration - in real implementation, you would use wagmi hooks
-    const wasteCounter = 0;
-    const hospitalCounter = 0;
+    // Read contract data
+    const { data: wasteCounter } = useReadContract({
+        address: WASTE_CONTRACT_ADDRESS as `0x${string}`,
+        abi: WasteInsuredABI,
+        functionName: 'getWasteLength',
+    });
 
-    // Mock helper functions for demonstration - optimized for gas efficiency
+    const { data: hospitalCounter } = useReadContract({
+        address: WASTE_CONTRACT_ADDRESS as `0x${string}`,
+        abi: WasteInsuredABI,
+        functionName: 'getHospitalCount',
+    });
+
     const recordWasteData = async (wasteData: {
         ipfsHash: string;
         weight: number;
@@ -29,21 +38,19 @@ export const useWasteContract = () => {
         setError(null);
 
         try {
-            // Simulate contract interaction
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            const hash = await writeContractAsync({
+                address: WASTE_CONTRACT_ADDRESS as `0x${string}`,
+                abi: WasteInsuredABI,
+                functionName: 'recordWaste',
+                args: [
+                    wasteData.ipfsHash,
+                    BigInt(wasteData.weight),
+                    BigInt(wasteData.wasteAmount),
+                    wasteData.hospitalAddress as `0x${string}`,
+                ],
+            });
 
-            // In a real implementation, you would call:
-            // const tx = await recordWaste({
-            //   args: [
-            //     wasteData.ipfsHash,
-            //     BigInt(wasteData.weight),
-            //     BigInt(wasteData.wasteAmount),
-            //     wasteData.hospitalAddress as `0x${string}`,
-            //   ],
-            // });
-            // await tx.wait();
-
-            return { hash: '0x' + Math.random().toString(16).substr(2, 64) };
+            return { hash };
         } catch (err: any) {
             setError(err.message || 'Failed to record waste');
             throw err;
@@ -61,16 +68,14 @@ export const useWasteContract = () => {
         setError(null);
 
         try {
-            // Simulate contract interaction
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const hash = await writeContractAsync({
+                address: WASTE_CONTRACT_ADDRESS as `0x${string}`,
+                abi: WasteInsuredABI,
+                functionName: 'validateWaste',
+                args: [BigInt(wasteId)],
+            });
 
-            // In a real implementation, you would call:
-            // const tx = await validateWaste({
-            //   args: [BigInt(wasteId)],
-            // });
-            // await tx.wait();
-
-            return { hash: '0x' + Math.random().toString(16).substr(2, 64) };
+            return { hash };
         } catch (err: any) {
             setError(err.message || 'Failed to validate waste');
             throw err;
@@ -88,22 +93,29 @@ export const useWasteContract = () => {
         setError(null);
 
         try {
-            // Simulate contract interaction
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            const hash = await writeContractAsync({
+                address: WASTE_CONTRACT_ADDRESS as `0x${string}`,
+                abi: WasteInsuredABI,
+                functionName: 'wastePayment',
+                args: [BigInt(wasteId), tokenAddress as `0x${string}`],
+            });
 
-            // In a real implementation, you would call:
-            // const tx = await wastePayment({
-            //   args: [BigInt(wasteId), tokenAddress as `0x${string}`],
-            // });
-            // await tx.wait();
-
-            return { hash: '0x' + Math.random().toString(16).substr(2, 64) };
+            return { hash };
         } catch (err: any) {
             setError(err.message || 'Failed to process payment');
             throw err;
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const getWasteInfo = (wasteId: number) => {
+        return useReadContract({
+            address: WASTE_CONTRACT_ADDRESS as `0x${string}`,
+            abi: WasteInsuredABI,
+            functionName: 'getWasteInfo',
+            args: [BigInt(wasteId)],
+        });
     };
 
     return {
@@ -116,5 +128,6 @@ export const useWasteContract = () => {
         recordWasteData,
         validateWasteRecord,
         processPayment,
+        getWasteInfo,
     };
 };

@@ -40,10 +40,12 @@ export const useWasteDataUpload = () => {
 
             if (ipfsHash) {
                 console.log(`File uploaded successfully with IPFS hash: ${ipfsHash}`);
-                return ipfsHash;
+                const fullUrl = `https://0x416f7ae46d370a0dea72156aa9ae27de48dcd8d2.calibration.filcdn.io/${ipfsHash}`;
+                return fullUrl;
             } else {
                 console.warn(`Could not get IPFS hash, using mock hash for: ${file.name}`);
-                return `Qm${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+                const mockHash = `Qm${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+                return `https://0x416f7ae46d370a0dea72156aa9ae27de48dcd8d2.calibration.filcdn.io/${mockHash}`;
             }
         } catch (error) {
             console.error(`Failed to upload file ${file.name}:`, error);
@@ -130,10 +132,11 @@ export const useWasteDataUpload = () => {
                 console.error('Failed to upload waste data JSON:', error);
 
                 const mockHash = `Qm${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
-                console.warn('Using mock IPFS hash for waste data:', mockHash);
+                const mockUrl = `https://0x416f7ae46d370a0dea72156aa9ae27de48dcd8d2.calibration.filcdn.io/${mockHash}`;
+                console.warn('Using mock IPFS hash for waste data:', mockUrl);
 
                 return {
-                    ipfsHash: mockHash,
+                    ipfsHash: mockUrl,
                     wasteDataFile: wasteDataFile,
                     evidenceFiles: evidenceFileData,
                     completeData: completeWasteData
@@ -147,9 +150,10 @@ export const useWasteDataUpload = () => {
                 console.warn('Network error detected, using fallback mode...');
 
                 const mockHash = `Qm${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+                const mockUrl = `https://0x416f7ae46d370a0dea72156aa9ae27de48dcd8d2.calibration.filcdn.io/${mockHash}`;
 
                 return {
-                    ipfsHash: mockHash,
+                    ipfsHash: mockUrl,
                     wasteDataFile: new File([JSON.stringify(wasteData, null, 2)], `waste-${wasteData.depositor}-${Date.now()}.json`),
                     evidenceFiles: [],
                     completeData: wasteData

@@ -1,4 +1,5 @@
-# Filecoin Synapse dApp Tutorial
+# Filecoin Onchain Cloud dApp
+
 
 This repo will serve with tutorial to demonstrate how to build a decentralized application (dApp) that interacts with Filecoin Synapse - a smart-contract based marketplace for storage and other services in the Filecoin ecosystem.
 
@@ -81,4 +82,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.

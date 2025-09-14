@@ -17,10 +17,10 @@ import { SynapseProvider } from "@/providers/SynapseProvider";
 const queryClient = new QueryClient();
 
 const config = createConfig({
-  chains: [filecoinCalibration, filecoin],
+  chains: [filecoinCalibration],
   connectors: [],
   transports: {
-    [filecoin.id]: http(),
+    // [filecoin.id]: http(),
     [filecoinCalibration.id]: http(),
   },
 });

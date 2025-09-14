@@ -141,6 +141,25 @@ export default function Home() {
               : balances?.usdfcBalanceFormatted.toFixed(1) + "$"}
           </span>
         </motion.p>
+
+        {/* Waste Management Navigation */}
+        <motion.div
+          variants={itemVariants}
+          className="mb-6"
+        >
+          <motion.a
+            href="/waste-management"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors shadow-lg"
+          >
+            <span className="mr-2">🗑️</span>
+            Waste Management System
+            <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </motion.a>
+        </motion.div>
         {chainId !== 314159 && (
           <motion.p
             variants={itemVariants}
@@ -188,11 +207,10 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleTabChange("manage-storage")}
-                  className={`flex-1 py-2 px-4 text-center border-b-2 transition-colors ${
-                    activeTab === "manage-storage"
+                  className={`flex-1 py-2 px-4 text-center border-b-2 transition-colors ${activeTab === "manage-storage"
                       ? "border-primary text-primary-foreground bg-primary"
                       : "border-transparent text-secondary hover:text-primary hover:bg-secondary/10"
-                  }`}
+                    }`}
                 >
                   Manage Storage
                 </motion.button>
@@ -200,11 +218,10 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleTabChange("upload")}
-                  className={`flex-1 py-2 px-4 text-center border-b-2 transition-colors ${
-                    activeTab === "upload"
+                  className={`flex-1 py-2 px-4 text-center border-b-2 transition-colors ${activeTab === "upload"
                       ? "border-primary text-primary-foreground bg-primary"
                       : "border-transparent text-secondary hover:text-primary hover:bg-secondary/10"
-                  }`}
+                    }`}
                 >
                   Upload File
                 </motion.button>
@@ -212,11 +229,10 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleTabChange("datasets")}
-                  className={`flex-1 py-2 px-4 text-center border-b-2 transition-colors ${
-                    activeTab === "datasets"
+                  className={`flex-1 py-2 px-4 text-center border-b-2 transition-colors ${activeTab === "datasets"
                       ? "border-primary text-primary-foreground bg-primary"
                       : "border-transparent text-secondary hover:text-primary hover:bg-secondary/10"
-                  }`}
+                    }`}
                 >
                   View Datasets
                 </motion.button>
